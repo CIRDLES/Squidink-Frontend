@@ -1,6 +1,6 @@
 import React from "react";
 //import ResizePanel from "react-resize-panel";
-import ResizePanel from "react-resize-panel";
+import ResizePanel from "./ResizePanel";
 import style from '../css/Main.css';
 import classNames from 'classnames/bind';
 const axios = require('axios');
@@ -15,40 +15,52 @@ export class Main extends React.Component {
         this.state = {
             totalReactPackages: null,
             fbrdisplay: 'block',
-            showfbr: true
+            showfbr: true,
+            adragging: false
         };
         this.fbrDisplay = React.createRef()
         this.hidediv = this.hidediv.bind(this);
+        this.hideinternal = this.hideinternal.bind(this);
+        this.showinternal = this.showinternal.bind(this);
 
 
     }
     async clickActionGen() {
-        const data = await fetch('reportsServlet', {
+        // Pass port via filebrowser start
+        const data = await fetch('http://192.168.99.100:8085/squid_servlet/reportsServlet', {
             method: "POST",
             body: null
         })
     }
     async componentDidMount() {
         // GET request using fetch with async/await
-        fetch('http://192.168.86.29:8090/api/resources/', {
-            headers: {
-                'X-Auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJsb2NhbGUiOiJlbiIsInZpZXdNb2RlIjoibGlzdCIsInNpbmdsZUNsaWNrIjpmYWxzZSwicGVybSI6eyJhZG1pbiI6ZmFsc2UsImV4ZWN1dGUiOnRydWUsImNyZWF0ZSI6dHJ1ZSwicmVuYW1lIjp0cnVlLCJtb2RpZnkiOnRydWUsImRlbGV0ZSI6dHJ1ZSwic2hhcmUiOnRydWUsImRvd25sb2FkIjp0cnVlfSwiY29tbWFuZHMiOltdLCJsb2NrUGFzc3dvcmQiOmZhbHNlLCJoaWRlRG90ZmlsZXMiOmZhbHNlfSwiZXhwIjoxNjE1Mjc2MzcwLCJpYXQiOjE2MTUyNjkxNzAsImlzcyI6IkZpbGUgQnJvd3NlciJ9.hyTJCJyogoKUmh4AU2pDbP4lyOVoR13tlEFLGQcZ2Ss'
-            }
-        }).then((response) => {
-            // The API call was successful!
-            return response.text();
-        }).then((html) => {
-            // This is the HTML from our response as a text string
-            this.setState({ totalReactPackages: html })
-        }).catch(function (err) {
-            // There was an error
-            console.warn('Something went wrong.', err);
-        });
+        //fetch('http://192.168.86.29:8090/api/resources/', {
+        //    headers: {
+        //        'X-Auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJsb2NhbGUiOiJlbiIsInZpZXdNb2RlIjoibGlzdCIsInNpbmdsZUNsaWNrIjpmYWxzZSwicGVybSI6eyJhZG1pbiI6ZmFsc2UsImV4ZWN1dGUiOnRydWUsImNyZWF0ZSI6dHJ1ZSwicmVuYW1lIjp0cnVlLCJtb2RpZnkiOnRydWUsImRlbGV0ZSI6dHJ1ZSwic2hhcmUiOnRydWUsImRvd25sb2FkIjp0cnVlfSwiY29tbWFuZHMiOltdLCJsb2NrUGFzc3dvcmQiOmZhbHNlLCJoaWRlRG90ZmlsZXMiOmZhbHNlfSwiZXhwIjoxNjE1Mjc2MzcwLCJpYXQiOjE2MTUyNjkxNzAsImlzcyI6IkZpbGUgQnJvd3NlciJ9.hyTJCJyogoKUmh4AU2pDbP4lyOVoR13tlEFLGQcZ2Ss'
+        //    }
+        //}).then((response) => {
+        //    // The API call was successful!
+        //    return response.text();
+        //}).then((html) => {
+        //    // This is the HTML from our response as a text string
+        //    this.setState({ totalReactPackages: html })
+        //}).catch(function (err) {
+        //    // There was an error
+        //    console.warn('Something went wrong.', err);
+        //});
 
     }
 
     async hidediv() {
         this.setState({showfbr: !this.state.showfbr});
+    }
+    async hideinternal() {
+        console.log('hide')
+        this.setState({adragging: true})
+    }
+    async showinternal() {
+        console.log('show')
+        this.setState({adragging: false})
     }
 
 
@@ -58,14 +70,15 @@ export class Main extends React.Component {
             <div className={cx('container')}>
                 <div className={cx('body')}>
                     {this.state.showfbr ?
-                        <ResizePanel  direction="e" style={{ id: 'fbr',flexGrow: '1'}} >
+
+                        <ResizePanel  onDragStart={this.hideinternal} onDragEnd={this.showinternal} direction="e" style={{ id: 'fbr',flexGrow: '1'}} >
                         <div className={cx('sidebar', 'withMargin', 'panel')}>
-                            <iframe style={{ display: 'flex', flexGrow: '1', overflow: 'auto', height: '100%'}} src='http://192.168.86.29:8090'></iframe>
+                                <iframe  style={{ display: 'flex', flexGrow: '1', overflow: 'auto', height: '100%'}} src='http://192.168.86.29:8090'></iframe>
                         </div>
                         </ResizePanel>
                         : null}
                     <div className={cx('content')} style={{ display: 'flex', overflow: 'hidden'}}>
-                        <div className={cx('header', 'panel')} style={{position: 'absolute', top: 0}}> <div className="rownav navbar">
+                        <div className={cx('header', 'panel')} style={{ position: 'absolute', top: -40}}> <div className="rownav navbar">
                             <div className="dropdown">
                                 <button className="dropbtn">Project
                                     <i className="fa fa-caret-down"></i>
@@ -208,7 +221,7 @@ export class Main extends React.Component {
                                     <i className="fa fa-caret-down"></i>
                                 </button>
                                 <div className="dropdown-content">
-                                    <a href="#" onClick="fileManager()">File Manager</a>
+                                    <a href="#">File Manager</a>
                                 </div>
                             </div>
                         </div>
