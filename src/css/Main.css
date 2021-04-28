@@ -73,7 +73,7 @@ body {
 
 .content {
     flex-grow: 2;
-    background: #3A4B87 url(../sources/SquidInk.svg) no-repeat fixed center;
+    background: #3A4B87 no-repeat fixed center;
     background-size: contain;
     justify-content: center;
     align-items: center;
@@ -170,5 +170,43 @@ body {
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
+    display: block;
+}
+/* Dropdown button */
+.dropdown-sub .dropbtn-sub {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: black;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit; /* Important for vertical align on mobile phones */
+    margin: 0; /* Important for vertical align on mobile phones */
+}
+/* Dropdown content (hidden by default) */
+.dropdown-content-sub {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 999999;
+}
+
+/* Links inside the dropdown */
+.dropdown-content-sub a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content-sub a:hover {
+    background-color: #4e6e92;
+}
+.dropdown-sub:hover .dropdown-content-sub {
     display: block;
 }

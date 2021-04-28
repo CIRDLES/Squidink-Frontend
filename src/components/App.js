@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import "../css/App.css";
 import {
   BrowserRouter as Router,
@@ -10,6 +10,9 @@ import {
 import { Main } from "./Main";
 
 class App extends Component {
+
+
+
   render() {
     return (
         <Router>
